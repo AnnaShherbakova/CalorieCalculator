@@ -10,3 +10,5 @@ Web-приложение "Калькулятор калорий"
 ## Ссылки:
 * [Miro](https://miro.com/app/board/o9J_kvYRfT4=/)
 * [Trello](https://trello.com/b/cbvrd0IZ/калькулятор-калорий)
+## Видео:
+* [Демо-видео](https://youtu.be/UASSU82tQ_A)
