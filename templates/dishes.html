@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Продукты</h1>
+    {% if session['admin'] %}
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#exampleModal">
+            Добавить продукт
+        </button>
+        <button type="button" class="btn btn-primary m-2" onclick="window.location.href = '/admin_deaut';" data-target="#exampleModal">
+            Выйти из режима администратора
+        </button>
+    {% endif %}
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="exampleModalLabel">Добавление продукта</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                </div>
+
+                <form action="" method="post" novalidate>
+                    <div class="modal-body">
+                        {{ form.hidden_tag() }}
+                        <p>
+                            {{ form.name.label }}<br>
+                            {{ form.name(size=32) }}
+                        </p>
+                        <p>
+                            {{ form.calorie.label }}<br>
+                            {{ form.calorie(size=32) }}
+                        </p>
+                        <p>
+                            {{ form.proteins.label }}<br>
+                            {{ form.proteins(size=32) }}
+                        </p>
+                        <p>
+                            {{ form.fats.label }}<br>
+                            {{ form.fats(size=32) }}
+                        </p>
+                        <p>
+                            {{ form.carbohydrates.label }}<br>
+                            {{ form.carbohydrates(size=32) }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>Название</th>
+            <th>Калорийсность</th>
+            <th>Белки</th>
+            <th>Жиры</th>
+            <th>Углеводы</th>
+        </tr>
+        {% for p in dishes %}
+            <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.calorie }}</td>
+            <td>{{ p.proteins }}</td>
+            <td>{{ p.fats }}</td>
+            <td>{{ p.carbohydrates }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

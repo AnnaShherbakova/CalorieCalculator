@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Кабинет пользователя {{ username }}</h1>
+    <p>email: {{ email }}</p>
+    <p>Дата рождения: {{ birthday.strftime("%Y-%m-%d") }}</p>
+    <p>Пол: {% if sex=="f" %} Женский {% else %} Мужской {% endif %} </p>
+
+    <button class="btn btn-danger" onClick='location.href="/logout"'>Выйти</button>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#exampleModal3">
+        Изменить профиль
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Добавление продукта</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="change_user" method="post" novalidate>
+                    <div class="modal-body">
+                        {{ form4.csrf_token() }}
+                        {{ form4.id(value=current_user.id) }}
+                        <p>
+                            {{ form4.password.label }}<br>
+                            {{ form4.password() }}
+                        </p>
+                        <p>
+                            {{ form4.email.label }}<br>
+                            {{ form4.email() }}
+                        </p>
+                        <p>
+                            {{ form4.birthday.label }}<br>
+                            {{ form4.birthday(type="date") }}
+                        </p>
+                        <p>
+                            {{ form4.sex.label }}<br>
+                            {{ form4.sex() }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <p>{{ form4.submit(class_="btn btn-primary") }}</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row m-3">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#exampleModal">
+            Добавить запись в свой профиль
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Добавление продукта</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="param" method="post" novalidate>
+                        <div class="modal-body">
+                            {{ form.hidden_tag() }}
+                            <p>
+                                {{ form.user_weight.label }}<br>
+                                {{ form.user_weight() }}
+                            </p>
+                            <p>
+                                {{ form.user_growth.label }}<br>
+                                {{ form.user_growth() }}
+                            </p>
+                            <p>
+                                {{ form.calorie.label }}<br>
+                                {{ form.calorie() }}
+                            </p>
+                            <p>
+                                {{ form.proteins.label }}<br>
+                                {{ form.proteins() }}
+                            </p>
+                            <p>
+                                {{ form.fats.label }}<br>
+                                {{ form.fats() }}
+                            </p>
+                            <p>
+                                {{ form.carbohydrates.label }}<br>
+                                {{ form.carbohydrates() }}
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <p>{{ form.submit(class_="btn btn-primary") }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#exampleModal1">
+            Добавить съеденное блюдо
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Добавление продукта</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="meals" method="post" novalidate>
+                        <div class="modal-body">
+                            {{ form2.hidden_tag() }}
+                            <p>
+                                {{ form2.dishes.label }}<br>
+                                {{ form2.dishes() }}
+                            </p>
+                            <p>
+                                {{ form2.dishes_weight.label }}<br>
+                                {{ form2.dishes_weight() }}
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <p>{{ form2.submit(class_="btn btn-primary") }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#exampleModal2">
+            Рассчитать каллораж
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Добавление продукта</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="param" method="post" novalidate>
+                        <div class="modal-body">
+                            {{ form.hidden_tag() }}
+                            <p>
+                                {{ form.user_weight.label }}<br>
+                                {{ form.user_weight() }}
+                            </p>
+                            <p>
+                                {{ form.user_growth.label }}<br>
+                                {{ form.user_growth() }}
+                            </p>
+                            <p>
+                                {{ form.calorie.label }}<br>
+                                {{ form.calorie() }}
+                            </p>
+                            <p>
+                                {{ form.proteins.label }}<br>
+                                {{ form.proteins() }}
+                            </p>
+                            <p>
+                                {{ form.fats.label }}<br>
+                                {{ form.fats() }}
+                            </p>
+                            <p>
+                                {{ form.carbohydrates.label }}<br>
+                                {{ form.carbohydrates() }}
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <p>{{ form.submit(class_="btn btn-primary") }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Ваш дневник</h1>
+
+    <table class="table">
+        <tr>
+            <th>Время</th>
+            <th>Вес</th>
+            <th>Рост</th>
+            <th>Калории</th>
+            <th>Протеины</th>
+            <th>Жиры</th>
+            <th>Углеводы</th>
+        </tr>
+        {% for p in params %}
+            <tr>
+                <td>{{ p.datetime.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                <td>{{ p.user_weight }}</td>
+                <td>{{ p.user_growth }}</td>
+                <td>{{ p.calorie }}</td>
+                <td>{{ p.proteins }}</td>
+                <td>{{ p.fats }}</td>
+                <td>{{ p.carbohydrates }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1>Приемы пищи</h1>
+    <table class="table">
+        <tr>
+            <th>Время</th>
+            <th>Продукт</th>
+            <th>Масса, гм</th>
+            <th>Калории</th>
+            <th>Белки</th>
+            <th>Жиры</th>
+            <th>Углеводы</th>
+            <th></th>
+        </tr>
+        {% for p in meals %}
+            <tr>
+                <td>{{ p.datetime.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                <td>{{ food[p.dishes_id] }}</td>
+                <td>{{ p.dishes_weight }}</td>
+                <td>{{ p.calorie }}</td>
+                <td>{{ p.proteins }}</td>
+                <td>{{ p.fats }}</td>
+                <td>{{ p.carbohydrates }}</td>
+                <td>
+                    <form action="delete_meals" method="post" novalidate>
+                        {{ form3.id(value=p.id) }}
+                        {{ form3.csrf_token() }}
+                        {{ form3.submit(class="btn btn-danger") }}
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1>Статистика по дням</h1>
+    <table class="table">
+        <tr>
+            <th>Дата</th>
+            {% for p in daily %}
+                <td>{{ p.date.strftime("%Y-%m-%d") }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>ККал</th>
+            {% for p in daily %}
+                <td>{{ p.calorie }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+{% endblock %}
