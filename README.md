@@ -13,6 +13,6 @@ Web-приложение "Калькулятор калорий"
 * [Trello](https://trello.com/b/cbvrd0IZ/калькулятор-калорий)
 * [Ссылка на приложение](http://aurelvu.pythonanywhere.com/)
 ## Видео:
-* [Демо-видео](https://youtu.be/UASSU82tQ_A)
+* [Демо-видео](https://youtu.be/83tHvDRHB2s)
 ## Презентация:
 * [Презентация](https://docs.google.com/presentation/d/1uh9p8qm7ny2K1QLewxx7R1BTDCvOltV6oyoZzzi50AM/edit?usp=sharing)
