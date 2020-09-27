@@ -12,3 +12,5 @@ Web-приложение "Калькулятор калорий"
 * [Trello](https://trello.com/b/cbvrd0IZ/калькулятор-калорий)
 ## Видео:
 * [Демо-видео](https://youtu.be/UASSU82tQ_A)
+## Презентация:
+* [Презентация](https://docs.google.com/presentation/d/1uh9p8qm7ny2K1QLewxx7R1BTDCvOltV6oyoZzzi50AM/edit?usp=sharing)
