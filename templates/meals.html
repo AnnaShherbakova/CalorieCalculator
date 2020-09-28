@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+ 
+{% block content %}
+    <h1>Приемы пищи</h1>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary m-2" onclick="ym(67706353, 'reachGoal', 'ADD_BUTN'); return true;" data-toggle="modal" data-target="#exampleModal1">
+        Добавить съеденное блюдо
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Добавление продукта</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="meals" method="post" novalidate>
+                    <div class="modal-body">
+                        {{ form2.hidden_tag() }}
+                        <p>
+                            {{ form2.dishes.label }}<br>
+                            {{ form2.dishes() }}
+                        </p>
+                        <p>
+                            {{ form2.dishes_weight.label }}<br>
+                            {{ form2.dishes_weight() }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <p>{{ form2.submit(class_="btn btn-primary") }}</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>Время</th>
+            <th>Продукт</th>
+            <th>Масса, гм</th>
+            <th>Калории</th>
+            <th>Белки</th>
+            <th>Жиры</th>
+            <th>Углеводы</th>
+            <th></th>
+        </tr>
+        {% for p in meals %}
+            <tr>
+                <td>{{ p.datetime.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                <td>{{ food[p.dishes_id] }}</td>
+                <td>{{ p.dishes_weight }}</td>
+                <td>{{ p.calorie }}</td>
+                <td>{{ p.proteins }}</td>
+                <td>{{ p.fats }}</td>
+                <td>{{ p.carbohydrates }}</td>
+                <td>
+                    <form action="delete_meals" method="post" novalidate>
+                        {{ form3.id(value=p.id) }}
+                        {{ form3.csrf_token() }}
+                        {{ form3.submit(class="btn btn-danger") }}
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

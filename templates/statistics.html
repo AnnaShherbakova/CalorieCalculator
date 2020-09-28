@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+ 
+
+{% block content %}
+    <h1>Статистика по дням</h1>
+
+    <form action="" method="get" novalidate="">
+       <span class="m-2">
+            <label for="date_from">От</label>
+            <input id="date_from" name="date_from" type="date" value="{{ day_from }}">
+        </span>
+        <span class="m-2">
+            <label for="date_to">До</label>
+            <input id="date_to" name="date_to" type="date" value="{{ day_to }}">
+        </span>
+        <span><input class="btn btn-primary" id="submit" name="submit" onclick="ym(67706353, 'reachGoal', 'FILTER'); return true;" type="submit" value="Отфильтровать"></span>
+    </form>
+
+
+
+    <table class="table">
+        <tr>
+            <th>Дата</th>
+            {% for p in daily %}
+                <td>{{ p.date.strftime("%Y-%m-%d") }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>ККал</th>
+            {% for p in daily %}
+                <td>{{ p.calorie }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+{% endblock %}

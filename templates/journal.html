@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+ 
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        function calculate() {
+            $(calorie).text("Рассчитываем...");
+            $(proteins).text("Рассчитываем...");
+            $(fats).text("Рассчитываем...");
+            $(carbohydrates).text("Рассчитываем...");
+            koef = document.getElementById("list").value;
+            $.post('/calc', {koef: koef}).done(function (response) {
+                $(calorie).text(response['calorie']);
+                $(proteins).text(response['proteins']);
+                $(fats).text(response['fats']);
+                $(carbohydrates).text(response['carbohydrates']);
+            }).fail(function () {
+                $(calorie).text("Error: Could not contact server.");
+                $(proteins).text("Error: Could not contact server.");
+                $(fats).text("Error: Could not contact server.");
+                $(carbohydrates).text("Error: Could not contact server.");
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h1>Ваш дневник</h1>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#exampleModal2">
+        Рассчитать каллораж
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Калькулятор калорий</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="m-2">
+                        <select name="list" id="list">
+                            <option value="-1">Похудеть</option>
+                            <option value="0">Остаться в прежней форме</option>
+                            <option value="1">Набрать вес</option>
+                        </select>
+                    </div>
+                    <div class="m-2">
+                        <a href="javascript:calculate();">Рассчитать</a>
+                    </div>
+                    <p>Необходимое количество калорий - <span id="calorie"></span></p>
+                    <p>Необходимое количество белков - <span id="proteins"></span></p>
+                    <p>Необходимое количество жиров - <span id="fats"></span></p>
+                    <p>Необходимое количество углеводов - <span id="carbohydrates"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#exampleModal">
+        Добавить запись в свой профиль
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Личные параметры</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="param" method="post" novalidate>
+                    <div class="modal-body">
+                        {{ form.hidden_tag() }}
+                        <p>
+                            {{ form.user_weight.label }}<br>
+                            {{ form.user_weight() }}
+                        </p>
+                        <p>
+                            {{ form.user_growth.label }}<br>
+                            {{ form.user_growth() }}
+                        </p>
+                        <p>
+                            {{ form.calorie.label }}<br>
+                            {{ form.calorie() }}
+                        </p>
+                        <p>
+                            {{ form.proteins.label }}<br>
+                            {{ form.proteins() }}
+                        </p>
+                        <p>
+                            {{ form.fats.label }}<br>
+                            {{ form.fats() }}
+                        </p>
+                        <p>
+                            {{ form.carbohydrates.label }}<br>
+                            {{ form.carbohydrates() }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <p>{{ form.submit(class_="btn btn-primary") }}</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <form action="" method="get" novalidate="">
+       <span class="m-2">
+            <label for="date_from">От</label>
+            <input id="date_from" name="date_from" type="date" value="{{ day_from }}">
+        </span>
+        <span class="m-2">
+            <label for="date_to">До</label>
+            <input id="date_to" name="date_to" type="date" value="{{ day_to }}">
+        </span>
+        <span><input class="btn btn-primary" id="submit" name="submit" type="submit" value="Отфильтровать"></span>
+    </form>
+
+    <table class="table">
+        <tr>
+            <th>Время</th>
+            <th>Вес</th>
+            <th>Рост</th>
+            <th>Калории</th>
+            <th>Белки</th>
+            <th>Жиры</th>
+            <th>Углеводы</th>
+        </tr>
+        {% for p in params %}
+            <tr>
+                <td>{{ p.datetime.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                <td>{{ p.user_weight }}</td>
+                <td>{{ p.user_growth }}</td>
+                <td>{{ p.calorie }}</td>
+                <td>{{ p.proteins }}</td>
+                <td>{{ p.fats }}</td>
+                <td>{{ p.carbohydrates }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
