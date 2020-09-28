@@ -3,25 +3,25 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateF
 from wtforms.validators import *
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    username = StringField('Логин', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    remember_me = BooleanField('Запомнить меня')
+    submit = SubmitField('Войти')
 
 class RegisterForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    username = StringField('Логин', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired(), Email()])
-    birthday = DateField('birthday', validators=[DataRequired()])
-    sex = SelectField('sex', choices=[('f', 'Женский'), ('m', 'Мужской')])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    birthday = DateField('Дата рождения', validators=[DataRequired()])
+    sex = SelectField('Пол', choices=[('f', 'Женский'), ('m', 'Мужской')])
+    remember_me = BooleanField('Запомнить меня')
+    submit = SubmitField('Зарегистрироваться')
 
 class AddParams(FlaskForm):
     user_weight = IntegerField('Вес', validators=[DataRequired()])
     user_growth = IntegerField('Рост', validators=[DataRequired()])
     calorie = IntegerField('Калории', validators=[DataRequired()])
-    proteins = IntegerField('Протеины', validators=[DataRequired()])
+    proteins = IntegerField('Белки', validators=[DataRequired()])
     fats = IntegerField('Жиры', validators=[DataRequired()])
     carbohydrates = IntegerField('Углеводы', validators=[DataRequired()])
     submit = SubmitField('Добавить запись')
@@ -48,8 +48,9 @@ class DeleteMeals(FlaskForm):
 
 class ChangeUser(FlaskForm):
     id = HiddenField('id')
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired(), Email()])
-    birthday = DateField('birthday', validators=[DataRequired()])
-    sex = SelectField('sex', choices=[('f', 'Женский'), ('m', 'Мужской')])
-    submit = SubmitField('Sign In')
+    birthday = DateField('Дата рождения', validators=[DataRequired()])
+    sex = SelectField('Пол', choices=[('f', 'Женский'), ('m', 'Мужской')])
+    submit = SubmitField('Изменить')
+

@@ -1,8 +1,8 @@
 import hashlib
 from datetime import datetime
 from xmlrpc.client import DateTime
-
-from flask import Flask, render_template, redirect, url_for, flash, session
+from dateutil.relativedelta import relativedelta
+from flask import Flask, render_template, redirect, url_for, flash, session, jsonify, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
 import models, forms
@@ -75,6 +75,7 @@ def dishes():
     d = models.Dishes.query.all()
     return render_template('dishes.html', title='Dishes', form=f, dishes=d)
 
+
 @app.route('/admin_deaut')
 def admin_deaut():
     session['admin'] = False
@@ -98,7 +99,8 @@ def meals_delete():
 
         p = models.Meals.query.filter_by(id=f.id.data).delete()
         db.session.commit()
-        return redirect('cabinet_' + str(current_user.id))
+        return '<script>document.location.href = document.referrer</script>'
+        #return redirect('cabinet_' + str(current_user.id))
 
 
 @app.route('/param', methods=["POST"])
@@ -111,7 +113,8 @@ def param():
                              carbohydrates=f.carbohydrates.data)
         db.session.add(p)
         db.session.commit()
-        return redirect('cabinet_' + str(current_user.id))
+        return '<script>document.location.href = document.referrer</script>'
+        #return redirect('cabinet_' + str(current_user.id))
 
 
 @app.route('/meals', methods=["POST"])
@@ -144,7 +147,9 @@ def meals():
 
         db.session.add(p)
         db.session.commit()
-        return redirect('cabinet_' + str(current_user.id))
+        return '<script>document.location.href = document.referrer</script>'
+        #return redirect('cabinet_' + str(current_user.id))
+
 
 @app.route('/change_user', methods=['POST'])
 @login_required
@@ -157,29 +162,125 @@ def change_user():
         u.birthday = f.birthday.data
         u.email = f.email.data
         db.session.commit()
-        return redirect('cabinet_' + str(current_user.id))
+        return '<script>document.location.href = document.referrer</script>'
+        #return redirect('cabinet_' + str(current_user.id))
+
+
+def calculator(sex, weight, height, age, target):
+    Calorie = 0
+    proteins = 0
+    fats = 0
+    carbohydrates = 0
+
+    if sex == 'm':
+        Calorie = 88.36 + 13.4 * weight + 4.8 * height - 5.7 * age
+        if target == 1:
+            Calorie += 200
+        elif target == -1:
+            Calorie -= 200
+    else:
+        Calorie = 447.6 + 9.2 * weight + 3.1 * height - 4.3 * age
+        if target == 1:
+            Calorie += 200
+        elif target == -1:
+            Calorie -= 200
+
+    proteins = (0.4 * Calorie) / 4
+    fats = (0.25 * Calorie) / 9
+    carbohydrates = (0.35 * Calorie) / 4
+    return Calorie, proteins, fats, carbohydrates
+
+
+@app.route('/calc', methods=['POST'])
+@login_required
+def calc():
+    koef = request.form['koef']
+    ss = models.Parametrs.query.filter_by(user_id=current_user.id).order_by(models.Parametrs.datetime.desc()).first()
+    Calorie, proteins, fats, carbohydrates = calculator(current_user.sex, ss.user_weight, ss.user_growth,
+                                                        relativedelta(datetime.today() - current_user.birthday).years,
+                                                        int(koef))
+    return jsonify({'calorie': Calorie, 'proteins': proteins, 'fats': fats, 'carbohydrates': carbohydrates})
+
 
 @app.route('/cabinet_<user_id>')
 @login_required
 def cabinet(user_id):
     u = models.User.query.filter_by(id=user_id).first()
-    f = forms.AddParams()
-    f2 = forms.AddMeals([])
-    f3 = forms.DeleteMeals()
     f4 = forms.ChangeUser()
-    f2.dishes.choices = [(str(i.id), i.name) for i in models.Dishes.query.all()]
-    p = models.Parametrs.query.filter_by(user_id=current_user.id).all()
-    daily = models.Daily_intake.query.all()
+
+    return render_template('cabinet.html', username=u.username, email=u.email, birthday=u.birthday, sex=u.sex,
+                           title='Кабинет пользователя', meals=meals, form4=f4)
+
+
+@app.route('/journal')
+@login_required
+def journal():
+    p = models.Parametrs.query.filter_by(user_id=current_user.id)
+    date_from = None
+    date_to = None
+    if 'date_from' in request.args and request.args['date_from'] != '':
+        date_from = datetime.strptime(request.args['date_from'], '%Y-%m-%d')
+        p = p.filter(models.Parametrs.datetime >= date_from)
+    if 'date_to' in request.args and request.args['date_to'] != '':
+        date_to = datetime.strptime(request.args['date_to'], '%Y-%m-%d')
+        p = p.filter(models.Parametrs.datetime <= date_to)
+
+    p = p.all()
+
+    if date_from is not None:
+        date_from = date_from.strftime('%Y-%m-%d')
+    else:
+        date_from = ''
+
+    if date_to is not None:
+        date_from = date_to.strftime('%Y-%m-%d')
+    else:
+        date_to = ''
+    f = forms.AddParams()
+
+    return render_template('journal.html', title='Дневник', params=p, form=f, day_from=date_from, day_to=date_to)
+
+
+@app.route('/user_meals')
+@login_required
+def user_meals():
     date = datetime(year=datetime.now().year, month=datetime.now().month, day=datetime.now().day, hour=0, minute=0,
                     second=0, microsecond=0)
-    meals = models.Meals.query.filter(
-        models.Daily_intake.date >= date).filter_by(user_id=current_user.id).all()
+    f2 = forms.AddMeals([])
+    f2.dishes.choices = [(str(i.id), i.name) for i in models.Dishes.query.all()]
+    f3 = forms.DeleteMeals()
+    meals = models.Meals.query.filter(models.Daily_intake.date >= date).filter_by(user_id=current_user.id).all()
     food = {i.id: i.name for i in models.Dishes.query.all()}
-    return render_template('cabinet.html', username=u.username, email=u.email, birthday=u.birthday, sex=u.sex, form2=f2,
-                           form=f,
-                           title='Кабинет пользователя', params=p, daily=daily, meals=meals, food=food, form3=f3,
-                           form4=f4)
+    return render_template('meals.html', title='Приемы пищи', form2=f2, food=food, form3=f3, meals=meals)
+
+
+@app.route('/statistics')
+@login_required
+def statistics():
+    q = models.Daily_intake.query.filter_by(user_id=current_user.id)
+    date_from = None
+    date_to = None
+    if 'date_from' in request.args and request.args['date_from'] != '':
+        date_from = datetime.strptime(request.args['date_from'], '%Y-%m-%d')
+        q = q.filter(models.Daily_intake.date >= date_from)
+    if 'date_to' in request.args and request.args['date_to'] != '':
+        date_to = datetime.strptime(request.args['date_to'], '%Y-%m-%d')
+        q = q.filter(models.Daily_intake.date <= date_to)
+
+    daily = q.all()
+
+    if date_from is not None:
+        date_from = date_from.strftime('%Y-%m-%d')
+    else:
+        date_from = ''
+
+    if date_to is not None:
+        date_from = date_to.strftime('%Y-%m-%d')
+    else:
+        date_to = ''
+
+    return render_template('statistics.html', title='Статистика', daily=daily, day_from=date_from, day_to=date_to)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
