@@ -7,7 +7,7 @@ Web-приложение "Калькулятор калорий"
 ## Документация:
 * [Техническое задание](https://docs.google.com/document/d/16PXZ8UDE5yjGe_SmwdVw_LmjTZnD81_mIYBpmVfr4Wc/edit?usp=sharing) [pdf](https://drive.google.com/file/d/1KJQtzDjhRXQQgbKQyHJ6XviDbw32VsPg/view?usp=sharing)
 * [Курсовая работа](https://drive.google.com/file/d/1KEOZzUx1cF27f9HNJJVF_9Y-12IZjPcR/view?usp=sharing) [pdf](https://drive.google.com/file/d/1KEOZzUx1cF27f9HNJJVF_9Y-12IZjPcR/view?usp=sharing)
-* [Отчет по ролям](https://drive.google.com/file/d/1FWsgC1zU-qSt2NjJXSNeed8lAyITpQwG/view?usp=sharing)
+* [Отчет по ролям](https://drive.google.com/file/d/1R5zIb4oaxFneXTx3Kve0QOKV4bfw5TXB/view?usp=sharing)
 ## Ссылки:
 * [Miro](https://miro.com/app/board/o9J_kvYRfT4=/)
 * [Trello](https://trello.com/b/cbvrd0IZ/калькулятор-калорий)
