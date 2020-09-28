@@ -11,7 +11,10 @@ Web-приложение "Калькулятор калорий"
 ## Ссылки:
 * [Miro](https://miro.com/app/board/o9J_kvYRfT4=/)
 * [Trello](https://trello.com/b/cbvrd0IZ/калькулятор-калорий)
-* [Ссылка на приложение](http://aurelvu.pythonanywhere.com/)
+*
+* [Приложение](http://aurelvu.pythonanywhere.com/)
+*
+* [Яндекс.Метрика](https://metrika.yandex.ru/dashboard?group=day&period=week&id=67706353)
 ## Видео:
 * [Демо-видео](https://youtu.be/83tHvDRHB2s)
 ## Презентация:
