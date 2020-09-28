@@ -9,9 +9,11 @@ import models, forms
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flasgger import Swagger, swag_from
 
 from config import app, db, migrate, login
 
+Swagger(app)
 
 @login.user_loader
 def load_user(id):
@@ -19,20 +21,24 @@ def load_user(id):
 
 
 @app.route('/logout')
+@swag_from('api/logout_get.yml', methods=['GET'])
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
 
 @app.route('/')
+@swag_from('api/index_get.yml', methods=['GET'])
 def index():
     return render_template('index.html', title='Main')
 
 
 @app.route('/register', methods=['get', 'post'])
+@swag_from('api/register_get.yml', methods=['GET'])
+@swag_from('api/register_post.yml', methods=['POST'])
 def register():
     form = forms.RegisterForm()
-    if form.validate_on_submit():
+    if form.is_submitted():
         u = models.User(username=form.username.data, email=form.email.data, birthday=form.birthday.data,
                         sex=form.sex.data, password_hash=generate_password_hash(form.password.data))
         db.session.add(u)
@@ -42,9 +48,11 @@ def register():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@swag_from('api/login_get.yml', methods=['GET'])
+@swag_from('api/login_post.yml', methods=['POST'])
 def login():
     form = forms.LoginForm()
-    if form.validate_on_submit():
+    if form.is_submitted():
         if form.username.data != 'admin':
             user = models.User.query.filter_by(username=form.username.data).first()
             if user is None or not user.password_hash != generate_password_hash(form.password.data):
@@ -65,9 +73,11 @@ def login():
 
 
 @app.route('/dishes', methods=["GET", "POST"])
+@swag_from('api/dishes_get.yml', methods=['GET'])
+@swag_from('api/dishes_post.yml', methods=['POST'])
 def dishes():
     f = forms.AddDishes()
-    if f.validate_on_submit() and session['admin']:
+    if f.is_submitted() and session['admin']:
         p = models.Dishes(name=f.name.data, calorie=f.calorie.data, proteins=f.proteins.data, fats=f.fats.data,
                           carbohydrates=f.carbohydrates.data)
         db.session.add(p)
@@ -77,15 +87,17 @@ def dishes():
 
 
 @app.route('/admin_deaut')
+@swag_from('api/admin_deaut_get.yml', methods=['GET'])
 def admin_deaut():
     session['admin'] = False
     return '<script>document.location.href = document.referrer</script>'
 
 
 @app.route('/delete_meals', methods=["POST"])
+@swag_from('api/delete_meals_post.yml', methods=['POST'])
 def meals_delete():
     f = forms.DeleteMeals()
-    if f.validate_on_submit():
+    if f.is_submitted():
         p = models.Meals.query.filter_by(id=f.id.data).first()
         date = datetime(year=datetime.now().year, month=datetime.now().month, day=datetime.now().day, hour=0, minute=0,
                         second=0, microsecond=0)
@@ -105,9 +117,10 @@ def meals_delete():
 
 @app.route('/param', methods=["POST"])
 @login_required
+@swag_from('api/param_post.yml', methods=['POST'])
 def param():
     f = forms.AddParams()
-    if f.validate_on_submit():
+    if f.is_submitted():
         p = models.Parametrs(user_id=current_user.id, user_weight=f.user_weight.data, user_growth=f.user_growth.data,
                              calorie=f.calorie.data, proteins=f.proteins.data, fats=f.fats.data,
                              carbohydrates=f.carbohydrates.data)
@@ -119,11 +132,12 @@ def param():
 
 @app.route('/meals', methods=["POST"])
 @login_required
+@swag_from('api/meals_post.yml', methods=['POST'])
 def meals():
     f = forms.AddMeals([])
     f.dishes.choices = [(str(i.id), i.name) for i in models.Dishes.query.all()]
 
-    if f.validate_on_submit():
+    if f.is_submitted():
         d = models.Dishes.query.filter_by(id=f.dishes.data).first()
         p = models.Meals(user_id=current_user.id, dishes_id=int(f.dishes.data),
                          dishes_weight=f.dishes_weight.data,
@@ -153,9 +167,10 @@ def meals():
 
 @app.route('/change_user', methods=['POST'])
 @login_required
+@swag_from('api/change_user_post.yml', methods=['POST'])
 def change_user():
     f = forms.ChangeUser()
-    if f.validate_on_submit():
+    if f.is_submitted():
         u = models.User.query.filter_by(id=current_user.id).first()
         u.password_hash = generate_password_hash(f.password.data)
         u.sex = f.sex.data
@@ -193,6 +208,7 @@ def calculator(sex, weight, height, age, target):
 
 @app.route('/calc', methods=['POST'])
 @login_required
+@swag_from('api/calc_post.yml', methods=['POST'])
 def calc():
     koef = request.form['koef']
     ss = models.Parametrs.query.filter_by(user_id=current_user.id).order_by(models.Parametrs.datetime.desc()).first()
@@ -204,6 +220,7 @@ def calc():
 
 @app.route('/cabinet_<user_id>')
 @login_required
+@swag_from('api/cabinet_.yml', methods=['GET'])
 def cabinet(user_id):
     u = models.User.query.filter_by(id=user_id).first()
     f4 = forms.ChangeUser()
@@ -214,6 +231,7 @@ def cabinet(user_id):
 
 @app.route('/journal')
 @login_required
+@swag_from('api/journal_get.yml', methods=['GET'])
 def journal():
     p = models.Parametrs.query.filter_by(user_id=current_user.id)
     date_from = None
@@ -243,6 +261,7 @@ def journal():
 
 @app.route('/user_meals')
 @login_required
+@swag_from('api/user_meals_get.yml', methods=['GET'])
 def user_meals():
     date = datetime(year=datetime.now().year, month=datetime.now().month, day=datetime.now().day, hour=0, minute=0,
                     second=0, microsecond=0)
@@ -256,6 +275,7 @@ def user_meals():
 
 @app.route('/statistics')
 @login_required
+@swag_from('api/statistics_get.yml', methods=['GET'])
 def statistics():
     q = models.Daily_intake.query.filter_by(user_id=current_user.id)
     date_from = None
