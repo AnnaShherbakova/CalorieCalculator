@@ -14,7 +14,7 @@ Web-приложение "Калькулятор калорий"
 
 * [Приложение](http://aurelvu.pythonanywhere.com/)
 * [Яндекс.Метрика](https://metrika.yandex.ru/dashboard?group=day&period=week&id=67706353)
-* [Swagger](http://127.0.0.1:5000/apidocs)
+* [Swagger](http://aurelvu.pythonanywhere.com/apidocs)
 ## Видео:
 * [Демо-видео](https://youtu.be/83tHvDRHB2s)
 ## Презентация:
