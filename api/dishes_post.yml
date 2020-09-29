@@ -1,0 +1,38 @@
+Страница добавления блюда
+Доступен только администратору
+---
+tags:
+  - Awesomeness Language API
+parameters:
+  - name: name
+    in: formData
+    description: name
+    required: true
+    type: string
+  - name: calorie
+    in: formData
+    description: calorie
+    required: true
+    type: integer
+  - name: proteins
+    in: formData
+    description: proteins
+    required: true
+    type: integer
+  - name: fats
+    in: formData
+    description: fats
+    required: true
+    type: integer
+  - name: carbohydrates
+    in: formData
+    description: carbohydrates
+    required: true
+    type: integer
+  - name: submit
+    in: formData
+    description: username
+    required: true
+    type: boolean
+    enum:
+      - true

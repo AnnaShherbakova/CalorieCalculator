@@ -1,0 +1,49 @@
+Страница регистрации
+Только для авторизованных пользователей
+---
+tags:
+  - Awesomeness Language API
+parameters:
+  - name: username
+    in: formData
+    description: username
+    required: true
+    type: string
+  - name: password
+    in: formData
+    description: password
+    required: true
+    type: string
+  - name: email
+    in: formData
+    description: email
+    required: true
+    type: string
+  - name: birthday
+    in: formData
+    description: birthday
+    required: true
+    type: date
+  - name: sex
+    in: formData
+    description: sex
+    required: true
+    type: boolean
+    enum:
+      - m
+      - f
+  - name: remember_me
+    in: formData
+    description: remember_me
+    required: true
+    type: boolean
+    enum:
+      - true
+      - false
+  - name: submit
+    in: formData
+    description: username
+    required: true
+    type: boolean
+    enum:
+      - true

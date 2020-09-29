@@ -1,0 +1,7 @@
+Главная страница сайта
+---
+tags:
+  - Awesomeness Language API
+responses:
+  200:
+    description: Страница с картинкой

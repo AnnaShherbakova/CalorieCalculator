@@ -1,0 +1,7 @@
+Страница авторизации
+---
+tags:
+  - Awesomeness Language API
+responses:
+  200:
+    description: Страница для авторизации пользователя

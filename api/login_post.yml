@@ -1,0 +1,30 @@
+Страница авторизации
+---
+tags:
+  - Awesomeness Language API
+parameters:
+  - name: username
+    in: formData
+    description: username
+    required: true
+    type: string
+  - name: password
+    in: formData
+    description: password
+    required: true
+    type: string
+  - name: remember_me
+    in: formData
+    description: remember_me
+    required: true
+    type: boolean
+    enum:
+      - true
+      - false
+  - name: submit
+    in: formData
+    description: username
+    required: true
+    type: boolean
+    enum:
+      - true

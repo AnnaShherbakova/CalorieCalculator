@@ -1,0 +1,19 @@
+Страница журнала пользователя
+Доступна только после авторизации
+---
+tags:
+  - Awesomeness Language API
+parameters:
+  - name: date_from
+    in: formData
+    description: date_from
+    required: false
+    type: date
+  - name: date_to
+    in: formData
+    description: date_to
+    required: false
+    type: date
+responses:
+  200:
+    description: Возвращает страницу журнала пользователя

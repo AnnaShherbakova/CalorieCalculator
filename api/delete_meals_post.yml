@@ -1,0 +1,18 @@
+Удаление приема пищи
+Только для авторизованных пользователей
+---
+tags:
+  - Awesomeness Language API
+parameters:
+  - name: id
+    in: formData
+    description: id
+    required: true
+    type: integer
+  - name: submit
+    in: formData
+    description: username
+    required: true
+    type: boolean
+    enum:
+      - true

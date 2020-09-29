@@ -1,0 +1,23 @@
+Страница добавления приема пищи
+Только для авторизованных пользователей
+---
+tags:
+  - Awesomeness Language API
+parameters:
+  - name: id_meals
+    in: formData
+    description: id_meals
+    required: true
+    type: integer
+  - name: dishes_weight
+    in: formData
+    description: dishes_weight
+    required: true
+    type: integer
+  - name: submit
+    in: formData
+    description: username
+    required: true
+    type: boolean
+    enum:
+      - true

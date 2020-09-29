@@ -1,0 +1,7 @@
+Производит деаунтетификацию прользователя
+---
+tags:
+  - Awesomeness Language API
+responses:
+  200:
+    description: Возврат на предыдущую стрницу

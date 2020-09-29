@@ -1,0 +1,7 @@
+Страница со списком еды
+---
+tags:
+  - Awesomeness Language API
+responses:
+  200:
+    description: Возвращается список продуктов в системе

@@ -1,0 +1,7 @@
+Деаунтетификация пользователя
+---
+tags:
+  - Awesomeness Language API
+responses:
+  200:
+    description: Осуществляет деаунтетификацию пользователя
